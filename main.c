@@ -13,7 +13,7 @@
 
 void printauplusbv(mpz_t a, mpz_t u, mpz_t b, mpz_t v, mpz_t p) 
 {
-      printf("a * u   +   p * v   = pgcd(a,p)\n");
+      //printf("a * u   +   p * v   = pgcd(a,p)\n");
 
       mpz_out_str(NULL, 10, a);
       printf(" * (");
@@ -92,13 +92,11 @@ void euclide(mpz_t a, mpz_t u0, mpz_t p, mpz_t v0, mpz_t res0)
 		mpz_submul(u, q, u1); // u = u-q*u1
 		mpz_submul(v, q, v1); // v = v-q*v1
 
-		printf("u : ");
+		/*printf("u : ");
 		mpz_out_str(NULL, 10, u);
 		printf("   -   v : ");
 		mpz_out_str(NULL, 10, v);
-		printf("\n");
-
-
+		printf("\n");*/
 
 
 		//Decalage de valeurs
@@ -112,38 +110,45 @@ void euclide(mpz_t a, mpz_t u0, mpz_t p, mpz_t v0, mpz_t res0)
 		mpz_set(v1, v);
 	}
 }
+
+
+
+void testEuclide(int nbIteration){
+	mpz_t a, p, u, v;
+
+	int i;
+
+	for(i=1; i<=nbIteration; i++){
+
+		mpz_init(a);
+		mpz_init(p);
+		mpz_init(u);
+		mpz_init(v);
+
+
+		//Init pgcd
+		mpz_t pgcd;
+		mpz_init(pgcd);
+
+		//Initialisation de a
+		mpz_set_ui(a, i);
+
+		//Initialisation de p
+		mpz_init_set_str(p, P_HEXVALUE, 16);
+
+
+		euclide(a, u, p, v, pgcd);
+
+		printf("\n\n\nResultat : \n");
+		printauplusbv(a, u, p, v, pgcd);
+	}
+}
+
+
  
 int main()
 {
-	mpz_t a, p, u, v, g;
-
-	mpz_init(a);
-	mpz_init(p);
-	mpz_init(u);
-	mpz_init(v);
-	mpz_init(g);
-
-
-	//Init pgcd
-	mpz_t pgcd;
-	mpz_init(pgcd);
-
-	//Initialisation de g
-	mpz_set_ui(g, 2);
-
-	//Initialisation de p
-	//mpz_init_set_str(p, P_HEXVALUE, 16);
-
-
-	mpz_set_ui(a, 1234);
-	mpz_set_ui(p, 5678);
-
-
-
-	euclide(a, u, p, v, pgcd);
-
-	printf("\n\n\nResultat : \n");
-	printauplusbv(a, u, p, v, pgcd);
+	testEuclide(10000);
 
     return 0; 
 }

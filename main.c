@@ -145,7 +145,9 @@ void testEuclide(int nbIteration){
 }
 
 
-int expMod(mpz_t p, mpz_t g, mpz_t a)
+int expMod(mpz_t p, mpz_t g, mpz_t a){
+	return 0;
+}
 
  
 int main()

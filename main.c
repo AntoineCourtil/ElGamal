@@ -28,6 +28,19 @@ void printauplusbv(mpz_t a, mpz_t u, mpz_t b, mpz_t v, mpz_t p)
 }
 
 
+void printPublicKey(mpz_t p, mpz_t g, mpz_t x, mpz_t publicKey){
+	printf("\nPublicKey :\n     p = ");
+	mpz_out_str(NULL, 10, p);
+	printf("\n     g = ");
+	mpz_out_str(NULL, 10, g);
+	printf("\n     x = ");
+	mpz_out_str(NULL, 10, x);
+	printf("\n     publicKey = ");
+	mpz_out_str(NULL, 10, publicKey);
+	printf("\n");
+}
+
+
 
 
 
@@ -164,13 +177,16 @@ void expMod(mpz_t p, mpz_t g, mpz_t a, mpz_t res){
 	mpz_t g2;
 	mpz_init(g2);
 
+	//printf("\n\na : ");
+	//mpz_out_str(NULL, 10, a);
+
 	//si a=1
 	if(mpz_cmp_ui(a, 1) == 0){
 		mpz_mod(res, g, p);
 	}
 	else{
 
-		//Calcul du reste de g/2
+		//Calcul du reste de a/2
 		mpz_mod_ui(aDivBy2, a, 2);
 
 		//Si a est pair
@@ -178,15 +194,17 @@ void expMod(mpz_t p, mpz_t g, mpz_t a, mpz_t res){
 
 			//Calcul de a/2
 			mpz_tdiv_q_ui(newA, a, 2);
+			mpz_mod(newA, newA, p);
 
 			//Calcul de g^2
 			mpz_pow_ui(g2, g, 2);
-
-			//Calcul de la prochaine recursion
-			expMod(p, g2, newA, res);
+			mpz_mod(g2, g2, p);
 
 			//Calcul de res mod p
 			mpz_mod(res, res, p);
+
+			//Calcul de la prochaine recursion
+			expMod(p, g2, newA, res);
 		}
 
 		//Si a est impair
@@ -195,14 +213,14 @@ void expMod(mpz_t p, mpz_t g, mpz_t a, mpz_t res){
 			//Si a>2 est impair
 			if(mpz_cmp_ui(a, 2) > 0){
 
-				printf("AAAAA");
-
 				//Calcul de (a-1)/2
 				mpz_sub_ui(newA, a, 1);
 				mpz_tdiv_q_ui(newA, newA, 2);
+				mpz_mod(newA, newA, p);
 
 				//Calcul de g^2
 				mpz_pow_ui(g2, g, 2);
+				mpz_mod(g2, g2, p);
 
 				//Calcul de la prochaine recursion
 				expMod(p, g2, newA, res);
@@ -270,12 +288,85 @@ void testExpMod(int nbIteration){
 	}
 }
 
+
+
+void keygen(mpz_t p, mpz_t g, mpz_t publicKey){
+
+	//Init de x
+	mpz_t x;
+	mpz_init(x);
+
+
+	//Init de la borne max pour le random de x 
+	mpz_t borne;
+	mpz_init(borne);
+
+	//borne = p-1
+	mpz_sub_ui(borne, p, 1);
+
+
+	//Init seed pour le randseed
+	long seed;
+
+	//Ici le seed sera lié au time
+	time(&seed);
+
+	//Init state pour créer le random
+	gmp_randstate_t state;
+	gmp_randinit_default(state);
+
+	//Création du state
+	gmp_randseed_ui(state, seed);
+
+	//Calcul du random pour x
+	mpz_urandomm(x, state, borne);
+
+
+	//Calcul de la Public Key
+	expMod(p, g, x, publicKey);
+
+	//Affichage des résultats
+	printPublicKey(p, g, x, publicKey);
+
+
+	//Verification
+	mpz_powm(publicKey, g, x, p);
+
+	//Affichage des résultats
+	printf("\nVerification :");
+	printPublicKey(p, g, x, publicKey);
+
+}
+
+
+void testKeygen(){
+
+	mpz_t p, g, publicKey;
+
+	mpz_init(p);
+	mpz_init(g);
+	mpz_init(publicKey);
+
+	//Initialisation de g
+	mpz_set_ui(g, 2);
+
+	//Initialisation de p
+	mpz_init_set_str(p, P_HEXVALUE, 16);
+
+	keygen(p, g, publicKey);
+
+
+}
+
+
  
 int main()
 {
 	//testEuclide(10000);
 
-	testExpMod(10);
+	testExpMod(100);
+
+	testKeygen();
 
     return 0; 
 }

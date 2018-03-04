@@ -17,9 +17,9 @@ On évalue la qualité d'un générateur de nombre aléatoire en fonction de sa 
 - Sa discrépance mesure l'écart maximal de la suite donnée avec l'équirépartition.
 
 
-## Implémentez la fonction Euclide
+## Question 3. Implémentez la fonction Euclide
 
-## Implémentez la fonction ExpMod
+## Question 4. Implémentez la fonction ExpMod
 
 J'ai choisi de créer les variables :
 - newA (nouvelle valeur de a en fonction de g pair ou impair)
@@ -27,7 +27,13 @@ J'ai choisi de créer les variables :
 Afin de ne pas écraser les valeur de a et g initiale.
 
 
+## Question 5. Implémentez ces trois fonctions
 
+- Keygen :
+
+- Encrypt :
+
+- Decrypt :
 
 
 

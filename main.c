@@ -114,13 +114,13 @@ void euclide(mpz_t a, mpz_t u0, mpz_t p, mpz_t v0, mpz_t res0)
 
 
 void testEuclide(int nbIteration){
-	mpz_t a, p, u, v;
+	mpz_t g, p, u, v;
 
 	int i;
 
 	for(i=1; i<=nbIteration; i++){
 
-		mpz_init(a);
+		mpz_init(g);
 		mpz_init(p);
 		mpz_init(u);
 		mpz_init(v);
@@ -130,20 +130,22 @@ void testEuclide(int nbIteration){
 		mpz_t pgcd;
 		mpz_init(pgcd);
 
-		//Initialisation de a
-		mpz_set_ui(a, i);
+		//Initialisation de g
+		mpz_set_ui(g, i);
 
 		//Initialisation de p
 		mpz_init_set_str(p, P_HEXVALUE, 16);
 
 
-		euclide(a, u, p, v, pgcd);
+		euclide(g, u, p, v, pgcd);
 
 		printf("\n\n\nResultat : \n");
-		printauplusbv(a, u, p, v, pgcd);
+		printauplusbv(g, u, p, v, pgcd);
 	}
 }
 
+
+int expMod(mpz_t p, mpz_t g, mpz_t a)
 
  
 int main()

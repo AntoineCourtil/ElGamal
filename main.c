@@ -145,14 +145,137 @@ void testEuclide(int nbIteration){
 }
 
 
-int expMod(mpz_t p, mpz_t g, mpz_t a){
-	return 0;
+/**
+* Calcule l’exponentiation binaire de
+* r = g^a mod p
+**/
+
+void expMod(mpz_t p, mpz_t g, mpz_t a, mpz_t res){
+
+	//Reste de a/2 afin de savoir s'il est pair ou non
+	mpz_t aDivBy2;
+	mpz_init(aDivBy2);
+
+	//Resultat de la nouvelle valeur de a pour continuer les calculs
+	mpz_t newA;
+	mpz_init(newA);
+
+	//Resultat de g^2
+	mpz_t g2;
+	mpz_init(g2);
+
+	//si a=1
+	if(mpz_cmp_ui(a, 1) == 0){
+		mpz_mod(res, g, p);
+	}
+	else{
+
+		//Calcul du reste de g/2
+		mpz_mod_ui(aDivBy2, a, 2);
+
+		//Si a est pair
+		if(mpz_cmp_ui(aDivBy2, 0) == 0){
+
+			//Calcul de a/2
+			mpz_tdiv_q_ui(newA, a, 2);
+
+			//Calcul de g^2
+			mpz_pow_ui(g2, g, 2);
+
+			//Calcul de la prochaine recursion
+			expMod(p, g2, newA, res);
+
+			//Calcul de res mod p
+			mpz_mod(res, res, p);
+		}
+
+		//Si a est impair
+		else{
+
+			//Si a>2 est impair
+			if(mpz_cmp_ui(a, 2) > 0){
+
+				printf("AAAAA");
+
+				//Calcul de (a-1)/2
+				mpz_sub_ui(newA, a, 1);
+				mpz_tdiv_q_ui(newA, newA, 2);
+
+				//Calcul de g^2
+				mpz_pow_ui(g2, g, 2);
+
+				//Calcul de la prochaine recursion
+				expMod(p, g2, newA, res);
+
+				//Calcul de res mod p
+				mpz_mod(res, res, p);
+
+				//r = r*g
+				mpz_mul(res, res, g);
+
+				//Calcul de res mod p
+				mpz_mod(res, res, p);				
+			}
+		}
+	}
+
+	//Liberation de mémoire
+	mpz_clears(aDivBy2, g2, newA, (void *) NULL);
+}
+
+
+void testExpMod(int nbIteration){
+	mpz_t g, p, a;
+
+	int i;
+
+	for(i=1; i<=nbIteration; i++){
+
+		mpz_init(g);
+		mpz_init(p);
+		mpz_init(a);
+
+
+		//Init resultat res
+		mpz_t res;
+		mpz_init(res);
+
+		//Init resultat qui doit etre trouvé res2
+		mpz_t res2;
+		mpz_init(res2);
+
+		//Initialisation de g
+		mpz_set_ui(g, i);
+
+		//Initialisation de a
+		mpz_set_ui(a, 2);
+
+		//Initialisation de p
+		mpz_init_set_str(p, P_HEXVALUE, 16);
+
+
+		expMod(p, g, a, res);
+		mpz_powm(res2, g, a, p);
+
+		printf("\nResultats g=%d : res = ", i);
+		mpz_out_str(NULL, 10, res);
+		printf(" et res2 = ");
+		mpz_out_str(NULL, 10, res2);
+
+
+		//Liberation de mémoire
+		mpz_clears(res, res2, (void *) NULL);
+
+
+	}
 }
 
  
 int main()
 {
-	testEuclide(10000);
+	//testEuclide(10000);
+
+	testExpMod(10);
 
     return 0; 
 }

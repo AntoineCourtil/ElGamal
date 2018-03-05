@@ -1,5 +1,9 @@
 # Rapport 
 
+COURTIL Antoine
+___
+
+
 ## Question 1. Quel langage de programmation avez-vous choisi ?
 
 Comme le conseillait le sujet, j'ai choisi le langage C dans le but d'intégrer la bibliothèque GMP afin de pouvoir effectuer les opérations nécessaires sur les grands nombres.

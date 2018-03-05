@@ -403,11 +403,8 @@ void testKeygen(int nbIteration){
 * Chiffre un message m en fonction de la clé publique publicKey
 **/
 
-void encrypt(mpz_t publicKey, mpz_t p, mpz_t g, mpz_t m, mpz_t C, mpz_t B){
+void encrypt(mpz_t publicKey, mpz_t p, mpz_t g, mpz_t m, mpz_t C, mpz_t B, mpz_t x){
 	
-	//Init de x
-	mpz_t x;
-	mpz_init(x);
 
 	//Calcul du random pour x
 	getRandomMpzt(x, p);
@@ -439,7 +436,7 @@ void encrypt(mpz_t publicKey, mpz_t p, mpz_t g, mpz_t m, mpz_t C, mpz_t B){
 **/
 
 void testEncrypt(int nbIteration){
-	mpz_t p, g, publicKey, C, B, m;
+	mpz_t p, g, publicKey, C, B, m, x;
 
 	int i;
 
@@ -465,7 +462,7 @@ void testEncrypt(int nbIteration){
 		mpz_set_ui(m, i);
 
 		//Chiffrement de m
-		encrypt(publicKey, p, g, m, C, B);
+		encrypt(publicKey, p, g, m, C, B, x);
 
 
 		//Affichage des résultats
@@ -485,6 +482,106 @@ void testEncrypt(int nbIteration){
 }
 
 
+/**
+* Déchiffre un message m en fonction de la clé secret secretKey
+**/
+
+void decrypt(mpz_t C, mpz_t B, mpz_t secretKey, mpz_t m, mpz_t p){
+
+	//Init de D pour le déchriffrement
+	mpz_t D;
+	mpz_init(D);
+
+	//Init de u et v pour euclide
+	mpz_t u, v;
+	mpz_init(u);
+	mpz_init(v);
+
+	//Init de pgcd pour le déchriffrement
+	mpz_t pgcd;
+	mpz_init(pgcd);
+
+
+	//D = B^secretKey mod p
+	expMod(p, B, secretKey, D);
+
+
+	//pgcd de D et p
+	//avec u = D^-1
+	euclide(D, u, p, v, pgcd);
+
+
+	//m = C × D^−1 mod p.
+	mpz_mul(m, C, u);
+
+
+	//m = m mod p
+	mpz_mod(m, m, p);
+
+
+	//Liberation de mémoire
+	mpz_clears(D, pgcd, u, v, (void *) NULL);
+}
+
+
+/**
+* Fonction qui effectue nbIteration de test de decrypt
+**/
+
+void testDecrypt(int nbIteration){
+
+	mpz_t p, g, publicKey, C, B, m, secretKey, mDecrypt;
+
+	int i;
+
+	for(i=1;i<=nbIteration;i++){
+
+		mpz_init(p);
+		mpz_init(g);
+		mpz_init(publicKey);
+		mpz_init(C);
+		mpz_init(B);
+		mpz_init(m);
+		mpz_init(secretKey);
+		mpz_init(mDecrypt);
+
+		//Initialisation de g
+		mpz_set_ui(g, 2);
+
+		//Initialisation de p
+		mpz_init_set_str(p, P_HEXVALUE, 16);
+
+		//Calcul de la publicKey
+		keygen(p, g, publicKey, 0);
+
+		//Initialisation de m
+		mpz_set_ui(m, i);
+
+		//Chiffrement de m
+		encrypt(publicKey, p, g, m, C, B, secretKey);
+
+		//Dechiffrement de m
+		decrypt(C, B, secretKey, mDecrypt, p);
+
+
+		//Affichage des résultats
+		printf("\nm : %d", i);
+		printf("\n     C : ");
+		mpz_out_str(NULL, 10, C);
+		printf("\n     B : ");
+		mpz_out_str(NULL, 10, B);
+		printf("\n     mDecrypt : ");
+		mpz_out_str(NULL, 10, mDecrypt);
+		printf("\n\n");
+
+
+
+
+		//Liberation de mémoire
+		mpz_clears(p, g, publicKey, C, B, m, mDecrypt, secretKey, (void *) NULL);
+	}
+}
+
  
 int main()
 {
@@ -494,7 +591,9 @@ int main()
 
 	//testKeygen(100);
 
-	testEncrypt(100);
+	//testEncrypt(100);
+
+	testDecrypt(100);
 
     return 0; 
 }

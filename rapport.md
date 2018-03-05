@@ -32,6 +32,7 @@ Afin de ne pas écraser les valeur de a et g initiale.
 - Keygen :
 
 - Encrypt :
+	Etant donné que le state de mon random est lié au time de la machine, et qu'on exécute plusieurs fois en même temps, le B est le même.
 
 - Decrypt :
 

@@ -297,18 +297,11 @@ void testExpMod(int nbIteration){
 	}
 }
 
-
-
 /**
-* Génére la clé publique publicKey
-* en fonction de p et g
+* Calcul pour x un grand nombre random en fonction de la borne p
 **/
 
-void keygen(mpz_t p, mpz_t g, mpz_t publicKey){
-
-	//Init de x
-	mpz_t x;
-	mpz_init(x);
+void getRandomMpzt(mpz_t x, mpz_t p){
 
 
 	//Init de la borne max pour le random de x 
@@ -334,22 +327,42 @@ void keygen(mpz_t p, mpz_t g, mpz_t publicKey){
 
 	//Calcul du random pour x
 	mpz_urandomm(x, state, borne);
+}
+
+
+
+/**
+* Génére la clé publique publicKey
+* en fonction de p et g
+**/
+
+void keygen(mpz_t p, mpz_t g, mpz_t publicKey, int afichage){
+
+	
+	//Init de x
+	mpz_t x;
+	mpz_init(x);
+
+	//Calcul du random pour x
+	getRandomMpzt(x, p);
 
 
 	//Calcul de la Public Key
-	expMod(p, g, x, publicKey);
+	expMod(p, g, x, publicKey);	
+
 
 	//Affichage des résultats
-	printPublicKey(p, g, x, publicKey);
+	if(afichage == 1){
+		printPublicKey(p, g, x, publicKey);
 
-	//Verification
-	mpz_powm(publicKey, g, x, p);
+		//Verification
+		mpz_powm(publicKey, g, x, p);
 
-	//Affichage des résultats
-	printf("\n\n          Verification :\n");
-	printPublicKey(p, g, x, publicKey);
+		printf("\n\n          Verification :\n");
+		printPublicKey(p, g, x, publicKey);
 
-	printf("\n\n___________________________________\n\n");
+		printf("\n\n___________________________________\n\n");
+	}
 
 }
 
@@ -376,13 +389,99 @@ void testKeygen(int nbIteration){
 		//Initialisation de p
 		mpz_init_set_str(p, P_HEXVALUE, 16);
 
-		keygen(p, g, publicKey);
+		keygen(p, g, publicKey, 1);
 
 		//Liberation de mémoire
 		mpz_clears(p, g, publicKey, (void *) NULL);
 	}
 
 
+}
+
+
+/**
+* Chiffre un message m en fonction de la clé publique publicKey
+**/
+
+void encrypt(mpz_t publicKey, mpz_t p, mpz_t g, mpz_t m, mpz_t C, mpz_t B){
+	
+	//Init de x
+	mpz_t x;
+	mpz_init(x);
+
+	//Calcul du random pour x
+	getRandomMpzt(x, p);
+
+	//Init de y mod p
+	mpz_t y;
+	mpz_init(y);
+
+	//Calcul de y
+	expMod(p, publicKey, x, y);
+
+	//y = y mod p
+	mpz_mod(y, y, p);
+
+	//C = m * y mod p
+	mpz_mul(C, m, y);
+
+	//C = C mod p
+	mpz_mod(C, C, p);
+
+	//B = g^x mod p
+	expMod(p, g, x, B);
+
+}
+
+
+/**
+* Fonction qui effectue nbIteration de test de encrypt
+**/
+
+void testEncrypt(int nbIteration){
+	mpz_t p, g, publicKey, C, B, m;
+
+	int i;
+
+	for(i=1;i<=nbIteration;i++){
+
+		mpz_init(p);
+		mpz_init(g);
+		mpz_init(publicKey);
+		mpz_init(C);
+		mpz_init(B);
+		mpz_init(m);
+
+		//Initialisation de g
+		mpz_set_ui(g, 2);
+
+		//Initialisation de p
+		mpz_init_set_str(p, P_HEXVALUE, 16);
+
+		//Calcul de la publicKey
+		keygen(p, g, publicKey, 0);
+
+		//Initialisation de m
+		mpz_set_ui(m, i);
+
+		//Chiffrement de m
+		encrypt(publicKey, p, g, m, C, B);
+
+
+		//Affichage des résultats
+		printf("\nm : %d", i);
+		printf("\nC : ");
+		mpz_out_str(NULL, 10, C);
+		printf("\nB : ");
+		mpz_out_str(NULL, 10, B);
+		printf("\n\n");
+
+
+
+
+		//Liberation de mémoire
+		mpz_clears(p, g, publicKey, C, B, m, (void *) NULL);
+	}
 }
 
 
@@ -393,7 +492,9 @@ int main()
 
 	//testExpMod(100);
 
-	testKeygen(10);
+	//testKeygen(100);
+
+	testEncrypt(100);
 
     return 0; 
 }

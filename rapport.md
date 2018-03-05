@@ -37,7 +37,7 @@ Afin de ne pas écraser les valeur de a et g initiale.
 - Decrypt :
 
 
-
+## Question 6. Vérifiez la propriété homomorphique en chiffrant deux messages différents
 
 
 ### Sources :

@@ -130,10 +130,17 @@ void euclide(mpz_t a, mpz_t u0, mpz_t p, mpz_t v0, mpz_t res0)
 * Fonction qui effectue nbIteration de test d'Eucide
 **/
 
-void testEuclide(int nbIteration){
+void testEuclide(int nbIteration, int affichage){
 	mpz_t g, p, u, v;
 
 	int i;
+
+	//Init fichier de sortie
+	FILE* file = fopen("euclideResults.txt", "w");
+
+	if(file == NULL){
+		printf("Erreur d'ouverture de fichier\n");
+	}
 
 	for(i=1; i<=nbIteration; i++){
 
@@ -156,9 +163,27 @@ void testEuclide(int nbIteration){
 
 		euclide(g, u, p, v, pgcd);
 
-		printf("\n\n\nResultat : \n");
-		printauplusbv(g, u, p, v, pgcd);
+		//Affichage resultats
+		if(affichage){
+			printf("\n\n\nResultat : \n");
+			printauplusbv(g, u, p, v, pgcd);
+		}
+
+
+
+		//Ecriture dans le fichier results
+
+		char* gString = mpz_get_str(NULL, 10, g);
+		char* uString = mpz_get_str(NULL, 10, u);
+		char* pString = mpz_get_str(NULL, 10, p);
+		char* vString = mpz_get_str(NULL, 10, v);
+		char* pgcdString = mpz_get_str(NULL, 10, pgcd);
+
+		fprintf(file, "%s\n     *(\n%s\n     )\n     +\n%s\n     *(%s\n    )\n     =\n%s\n\n\n", gString, uString, pString, vString, pgcdString);
+
 	}
+
+	fclose(file);
 }
 
 
@@ -251,10 +276,17 @@ void expMod(mpz_t p, mpz_t g, mpz_t a, mpz_t res){
 * Fonction qui effectue nbIteration de test de expMod
 **/
 
-void testExpMod(int nbIteration){
+void testExpMod(int nbIteration, int affichage){
 	mpz_t g, p, a;
 
 	int i;
+
+	//Init fichier de sortie
+	FILE* file = fopen("expModResults.txt", "w");
+
+	if(file == NULL){
+		printf("Erreur d'ouverture de fichier\n");
+	}
 
 	for(i=1; i<=nbIteration; i++){
 
@@ -284,10 +316,22 @@ void testExpMod(int nbIteration){
 		expMod(p, g, a, res);
 		mpz_powm(res2, g, a, p);
 
-		printf("\nResultats g=%d : res = ", i);
-		mpz_out_str(NULL, 10, res);
-		printf(" et res2 = ");
-		mpz_out_str(NULL, 10, res2);
+		//Affichage resultats
+		if(affichage){
+			printf("\nResultats g=%d : res = ", i);
+			mpz_out_str(NULL, 10, res);
+			printf(" et res2 = ");
+			mpz_out_str(NULL, 10, res2);
+		}
+
+
+
+		//Ecriture dans le fichier results
+
+		char* resString = mpz_get_str(NULL, 10, res);
+		char* res2String = mpz_get_str(NULL, 10, res2);
+
+		fprintf(file, "     g : %d\nres : %s\nverifRes : %s\n\n\n", i, resString, res2String);
 
 
 		//Liberation de mémoire
@@ -295,6 +339,8 @@ void testExpMod(int nbIteration){
 
 
 	}
+
+	fclose(file);
 }
 
 /**
@@ -336,7 +382,7 @@ void getRandomMpzt(mpz_t x, mpz_t p){
 * en fonction de p et g
 **/
 
-void keygen(mpz_t p, mpz_t g, mpz_t publicKey, int afichage){
+void keygen(mpz_t p, mpz_t g, mpz_t publicKey, int affichage){
 
 	
 	//Init de x
@@ -352,7 +398,7 @@ void keygen(mpz_t p, mpz_t g, mpz_t publicKey, int afichage){
 
 
 	//Affichage des résultats
-	if(afichage == 1){
+	if(affichage == 1){
 		printPublicKey(p, g, x, publicKey);
 
 		//Verification
@@ -377,6 +423,13 @@ void testKeygen(int nbIteration){
 
 	int i;
 
+	//Init fichier de sortie
+	FILE* file = fopen("keygenResults.txt", "w");
+
+	if(file == NULL){
+		printf("Erreur d'ouverture de fichier\n");
+	}
+
 	for(i=1;i<=nbIteration;i++){
 
 		mpz_init(p);
@@ -389,13 +442,24 @@ void testKeygen(int nbIteration){
 		//Initialisation de p
 		mpz_init_set_str(p, P_HEXVALUE, 16);
 
-		keygen(p, g, publicKey, 1);
+		//Calcul de la publicKey
+		keygen(p, g, publicKey, 0);
+
+
+		//Ecriture dans le fichier results
+
+		char* pString = mpz_get_str(NULL, 10, p);
+		char* gString = mpz_get_str(NULL, 10, g);
+		char* publicKeyString = mpz_get_str(NULL, 10, publicKey);
+
+		fprintf(file, "     p : %s\n     g : %s\npublicKey : %s\n\n\n", pString, gString, publicKeyString);
+
 
 		//Liberation de mémoire
 		mpz_clears(p, g, publicKey, (void *) NULL);
 	}
 
-
+	fclose(file);
 }
 
 
@@ -437,10 +501,17 @@ void encrypt(mpz_t publicKey, mpz_t p, mpz_t g, mpz_t m, mpz_t C, mpz_t B, mpz_t
 * Fonction qui effectue nbIteration de test de encrypt
 **/
 
-void testEncrypt(int nbIteration){
+void testEncrypt(int nbIteration, int affichage){
 	mpz_t p, g, publicKey, C, B, m, x;
 
 	int i;
+
+	//Init fichier de sortie
+	FILE* file = fopen("encryptResults.txt", "w");
+
+	if(file == NULL){
+		printf("Erreur d'ouverture de fichier\n");
+	}
 
 	for(i=1;i<=nbIteration;i++){
 
@@ -468,19 +539,29 @@ void testEncrypt(int nbIteration){
 
 
 		//Affichage des résultats
-		printf("\nm : %d", i);
-		printf("\nC : ");
-		mpz_out_str(NULL, 10, C);
-		printf("\nB : ");
-		mpz_out_str(NULL, 10, B);
-		printf("\n\n");
+		if(affichage){
+			printf("\nm : %d", i);
+			printf("\nC : ");
+			mpz_out_str(NULL, 10, C);
+			printf("\nB : ");
+			mpz_out_str(NULL, 10, B);
+			printf("\n\n");
+		}
 
 
+		//Ecriture dans le fichier results
+
+		char* CString = mpz_get_str(NULL, 10, C);
+		char* BString = mpz_get_str(NULL, 10, B);
+
+		fprintf(file, "m : %d\nC : %s\nB : %s\n\n\n", i, CString, BString);
 
 
 		//Liberation de mémoire
 		mpz_clears(p, g, publicKey, C, B, m, (void *) NULL);
 	}
+
+	fclose(file);
 }
 
 
@@ -530,11 +611,18 @@ void decrypt(mpz_t C, mpz_t B, mpz_t secretKey, mpz_t m, mpz_t p){
 * Fonction qui effectue nbIteration de test de decrypt
 **/
 
-void testDecrypt(int nbIteration){
+void testDecrypt(int nbIteration, int affichage){
 
 	mpz_t p, g, publicKey, C, B, m, secretKey, mDecrypt;
 
 	int i;
+
+	//Init fichier de sortie
+	FILE* file = fopen("decryptResults.txt", "w");
+
+	if(file == NULL){
+		printf("Erreur d'ouverture de fichier\n");
+	}
 
 	for(i=1;i<=nbIteration;i++){
 
@@ -567,21 +655,35 @@ void testDecrypt(int nbIteration){
 
 
 		//Affichage des résultats
-		printf("\nm : %d", i);
-		printf("\n     C : ");
-		mpz_out_str(NULL, 10, C);
-		printf("\n     B : ");
-		mpz_out_str(NULL, 10, B);
-		printf("\n     mDecrypt : ");
-		mpz_out_str(NULL, 10, mDecrypt);
-		printf("\n\n");
+		if(affichage){
+			printf("\nm : %d", i);
+			printf("\n     C : ");
+			mpz_out_str(NULL, 10, C);
+			printf("\n     B : ");
+			mpz_out_str(NULL, 10, B);
+			printf("\n     mDecrypt : ");
+			mpz_out_str(NULL, 10, mDecrypt);
+			printf("\n\n");
+		}
 
+
+
+		//Ecriture dans le fichier results
+
+		char* CString = mpz_get_str(NULL, 10, C);
+		char* BString = mpz_get_str(NULL, 10, B);
+		char* mDecryptString = mpz_get_str(NULL, 10, mDecrypt);
+
+		fprintf(file, "m : %d\nC : %s\nB : %s\nmDecrypt : %s\n\n\n", i, CString, BString, mDecryptString);
 
 
 
 		//Liberation de mémoire
 		mpz_clears(p, g, publicKey, C, B, m, mDecrypt, secretKey, (void *) NULL);
 	}
+
+
+	fclose(file);
 }
 
 
@@ -590,7 +692,7 @@ void testDecrypt(int nbIteration){
 * Vérifie la propriété homomorphique de ElGamal 
 **/
 
-void homomorphie(mpz_t p, mpz_t g, mpz_t publicKey, mpz_t secretKey, int affichage){
+void homomorphie(mpz_t p, mpz_t g, mpz_t publicKey, mpz_t secretKey, int affichage, FILE* file){
 
 	//Init des variables à calculer
 	mpz_t C, C1, C2, B, B1, B2;
@@ -605,18 +707,18 @@ void homomorphie(mpz_t p, mpz_t g, mpz_t publicKey, mpz_t secretKey, int afficha
 
 
 	//Init des messages m
-	mpz_t m, m1, m2, m1x2;
+	mpz_t m, m1, m2, m1xm2;
 
 	mpz_init(m);
 	mpz_init(m1);
 	mpz_init(m2);
-	mpz_init(m1x2);
+	mpz_init(m1xm2);
 
 
 	//Calcul des messages m1 et m2
 	mpz_set_ui(m1, rand());
 	mpz_set_ui(m2, rand());
-	mpz_mul(m1x2, m1, m2);
+	mpz_mul(m1xm2, m1, m2);
 
 
 	//Calcul de C1 et B1
@@ -646,13 +748,23 @@ void homomorphie(mpz_t p, mpz_t g, mpz_t publicKey, mpz_t secretKey, int afficha
 		mpz_out_str(NULL, 10, m1);
 		printf("\n     m2 : ");
 		mpz_out_str(NULL, 10, m2);
-		printf("\n     m1x2 : ");
-		mpz_out_str(NULL, 10, m1x2);
+		printf("\n     m1xm2 : ");
+		mpz_out_str(NULL, 10, m1xm2);
 		printf("\n     m    : ");
 		mpz_out_str(NULL, 10, m);
 		printf("\n\n");
 	}
 
+	//Ecriture dans le fichier result
+
+	char* m1String = mpz_get_str(NULL, 10, m1);
+	char* m2String = mpz_get_str(NULL, 10, m2);
+	char* m1xm2String = mpz_get_str(NULL, 10, m1xm2);
+	char* mString = mpz_get_str(NULL, 10, m);
+
+	fprintf(file, "m1 : %s\nm2 : %s\nm1xm2 : %s\nm decrypt : %s\n\n\n", m1String, m2String, m1xm2String, mString);
+
+	
 }
 
 
@@ -665,6 +777,16 @@ void testHomomorphie(int nbIteration){
 	mpz_t p, g, publicKey, secretKey;
 
 	int i;
+
+	//Init fichier de sortie
+	FILE* file = fopen("homomorphieResults.txt", "w");
+
+	if(file == NULL){
+		printf("Erreur d'ouverture de fichier\n");
+	}
+
+
+	
 
 	for(i=1;i<=nbIteration;i++){
 
@@ -683,38 +805,32 @@ void testHomomorphie(int nbIteration){
 		keygen(p, g, publicKey, 0);
 
 		//Test de la propriété homomorphique
-		homomorphie(p, g, publicKey, secretKey, 1);
+		homomorphie(p, g, publicKey, secretKey, 0, file);
 
 		//Liberation de mémoire
 		mpz_clears(p, g, publicKey, secretKey, (void *) NULL);
 	}
+
+
+
+	fclose(file);
 }
 
 
  
 int main()
 {
-	//testEuclide(10000);
+	testEuclide(10000, 0);
 
-	//testExpMod(100);
+	testExpMod(100, 0);
 
-	//testKeygen(100);
+	testKeygen(100);
 
-	//testEncrypt(100);
+	testEncrypt(100, 0);
 
-	//testDecrypt(100);
+	testDecrypt(100, 0);
 
 	testHomomorphie(100);
 
-	FILE* file = fopen("results.txt", "w+");
-
-	if(file == NULL){
-		printf("Erreur d'ouverture de fichier\n");
-		return -1;
-	}
-
-
-	fclose(file);
-
-    return 0; 
+	return 0; 
 }

@@ -1,0 +1,500 @@
+     g : 1
+res : 1
+verifRes : 1
+
+
+     g : 2
+res : 4
+verifRes : 4
+
+
+     g : 3
+res : 9
+verifRes : 9
+
+
+     g : 4
+res : 16
+verifRes : 16
+
+
+     g : 5
+res : 25
+verifRes : 25
+
+
+     g : 6
+res : 36
+verifRes : 36
+
+
+     g : 7
+res : 49
+verifRes : 49
+
+
+     g : 8
+res : 64
+verifRes : 64
+
+
+     g : 9
+res : 81
+verifRes : 81
+
+
+     g : 10
+res : 100
+verifRes : 100
+
+
+     g : 11
+res : 121
+verifRes : 121
+
+
+     g : 12
+res : 144
+verifRes : 144
+
+
+     g : 13
+res : 169
+verifRes : 169
+
+
+     g : 14
+res : 196
+verifRes : 196
+
+
+     g : 15
+res : 225
+verifRes : 225
+
+
+     g : 16
+res : 256
+verifRes : 256
+
+
+     g : 17
+res : 289
+verifRes : 289
+
+
+     g : 18
+res : 324
+verifRes : 324
+
+
+     g : 19
+res : 361
+verifRes : 361
+
+
+     g : 20
+res : 400
+verifRes : 400
+
+
+     g : 21
+res : 441
+verifRes : 441
+
+
+     g : 22
+res : 484
+verifRes : 484
+
+
+     g : 23
+res : 529
+verifRes : 529
+
+
+     g : 24
+res : 576
+verifRes : 576
+
+
+     g : 25
+res : 625
+verifRes : 625
+
+
+     g : 26
+res : 676
+verifRes : 676
+
+
+     g : 27
+res : 729
+verifRes : 729
+
+
+     g : 28
+res : 784
+verifRes : 784
+
+
+     g : 29
+res : 841
+verifRes : 841
+
+
+     g : 30
+res : 900
+verifRes : 900
+
+
+     g : 31
+res : 961
+verifRes : 961
+
+
+     g : 32
+res : 1024
+verifRes : 1024
+
+
+     g : 33
+res : 1089
+verifRes : 1089
+
+
+     g : 34
+res : 1156
+verifRes : 1156
+
+
+     g : 35
+res : 1225
+verifRes : 1225
+
+
+     g : 36
+res : 1296
+verifRes : 1296
+
+
+     g : 37
+res : 1369
+verifRes : 1369
+
+
+     g : 38
+res : 1444
+verifRes : 1444
+
+
+     g : 39
+res : 1521
+verifRes : 1521
+
+
+     g : 40
+res : 1600
+verifRes : 1600
+
+
+     g : 41
+res : 1681
+verifRes : 1681
+
+
+     g : 42
+res : 1764
+verifRes : 1764
+
+
+     g : 43
+res : 1849
+verifRes : 1849
+
+
+     g : 44
+res : 1936
+verifRes : 1936
+
+
+     g : 45
+res : 2025
+verifRes : 2025
+
+
+     g : 46
+res : 2116
+verifRes : 2116
+
+
+     g : 47
+res : 2209
+verifRes : 2209
+
+
+     g : 48
+res : 2304
+verifRes : 2304
+
+
+     g : 49
+res : 2401
+verifRes : 2401
+
+
+     g : 50
+res : 2500
+verifRes : 2500
+
+
+     g : 51
+res : 2601
+verifRes : 2601
+
+
+     g : 52
+res : 2704
+verifRes : 2704
+
+
+     g : 53
+res : 2809
+verifRes : 2809
+
+
+     g : 54
+res : 2916
+verifRes : 2916
+
+
+     g : 55
+res : 3025
+verifRes : 3025
+
+
+     g : 56
+res : 3136
+verifRes : 3136
+
+
+     g : 57
+res : 3249
+verifRes : 3249
+
+
+     g : 58
+res : 3364
+verifRes : 3364
+
+
+     g : 59
+res : 3481
+verifRes : 3481
+
+
+     g : 60
+res : 3600
+verifRes : 3600
+
+
+     g : 61
+res : 3721
+verifRes : 3721
+
+
+     g : 62
+res : 3844
+verifRes : 3844
+
+
+     g : 63
+res : 3969
+verifRes : 3969
+
+
+     g : 64
+res : 4096
+verifRes : 4096
+
+
+     g : 65
+res : 4225
+verifRes : 4225
+
+
+     g : 66
+res : 4356
+verifRes : 4356
+
+
+     g : 67
+res : 4489
+verifRes : 4489
+
+
+     g : 68
+res : 4624
+verifRes : 4624
+
+
+     g : 69
+res : 4761
+verifRes : 4761
+
+
+     g : 70
+res : 4900
+verifRes : 4900
+
+
+     g : 71
+res : 5041
+verifRes : 5041
+
+
+     g : 72
+res : 5184
+verifRes : 5184
+
+
+     g : 73
+res : 5329
+verifRes : 5329
+
+
+     g : 74
+res : 5476
+verifRes : 5476
+
+
+     g : 75
+res : 5625
+verifRes : 5625
+
+
+     g : 76
+res : 5776
+verifRes : 5776
+
+
+     g : 77
+res : 5929
+verifRes : 5929
+
+
+     g : 78
+res : 6084
+verifRes : 6084
+
+
+     g : 79
+res : 6241
+verifRes : 6241
+
+
+     g : 80
+res : 6400
+verifRes : 6400
+
+
+     g : 81
+res : 6561
+verifRes : 6561
+
+
+     g : 82
+res : 6724
+verifRes : 6724
+
+
+     g : 83
+res : 6889
+verifRes : 6889
+
+
+     g : 84
+res : 7056
+verifRes : 7056
+
+
+     g : 85
+res : 7225
+verifRes : 7225
+
+
+     g : 86
+res : 7396
+verifRes : 7396
+
+
+     g : 87
+res : 7569
+verifRes : 7569
+
+
+     g : 88
+res : 7744
+verifRes : 7744
+
+
+     g : 89
+res : 7921
+verifRes : 7921
+
+
+     g : 90
+res : 8100
+verifRes : 8100
+
+
+     g : 91
+res : 8281
+verifRes : 8281
+
+
+     g : 92
+res : 8464
+verifRes : 8464
+
+
+     g : 93
+res : 8649
+verifRes : 8649
+
+
+     g : 94
+res : 8836
+verifRes : 8836
+
+
+     g : 95
+res : 9025
+verifRes : 9025
+
+
+     g : 96
+res : 9216
+verifRes : 9216
+
+
+     g : 97
+res : 9409
+verifRes : 9409
+
+
+     g : 98
+res : 9604
+verifRes : 9604
+
+
+     g : 99
+res : 9801
+verifRes : 9801
+
+
+     g : 100
+res : 10000
+verifRes : 10000
+
+

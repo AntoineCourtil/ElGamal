@@ -403,11 +403,13 @@ void testKeygen(int nbIteration){
 * Chiffre un message m en fonction de la clé publique publicKey
 **/
 
-void encrypt(mpz_t publicKey, mpz_t p, mpz_t g, mpz_t m, mpz_t C, mpz_t B, mpz_t x){
+void encrypt(mpz_t publicKey, mpz_t p, mpz_t g, mpz_t m, mpz_t C, mpz_t B, mpz_t x, int recalculRandom){
 	
 
-	//Calcul du random pour x
-	getRandomMpzt(x, p);
+	if(recalculRandom){
+		//Calcul du random pour x
+		getRandomMpzt(x, p);
+	}
 
 	//Init de y mod p
 	mpz_t y;
@@ -462,7 +464,7 @@ void testEncrypt(int nbIteration){
 		mpz_set_ui(m, i);
 
 		//Chiffrement de m
-		encrypt(publicKey, p, g, m, C, B, x);
+		encrypt(publicKey, p, g, m, C, B, x, 1);
 
 
 		//Affichage des résultats
@@ -558,7 +560,7 @@ void testDecrypt(int nbIteration){
 		mpz_set_ui(m, i);
 
 		//Chiffrement de m
-		encrypt(publicKey, p, g, m, C, B, secretKey);
+		encrypt(publicKey, p, g, m, C, B, secretKey, 1);
 
 		//Dechiffrement de m
 		decrypt(C, B, secretKey, mDecrypt, p);
@@ -582,6 +584,113 @@ void testDecrypt(int nbIteration){
 	}
 }
 
+
+
+/**
+* Vérifie la propriété homomorphique de ElGamal 
+**/
+
+void homomorphie(mpz_t p, mpz_t g, mpz_t publicKey, mpz_t secretKey, int affichage){
+
+	//Init des variables à calculer
+	mpz_t C, C1, C2, B, B1, B2;
+
+	mpz_init(C);
+	mpz_init(C1);
+	mpz_init(C1);
+	mpz_init(B);
+	mpz_init(B1);
+	mpz_init(B2);
+
+
+
+	//Init des messages m
+	mpz_t m, m1, m2, m1x2;
+
+	mpz_init(m);
+	mpz_init(m1);
+	mpz_init(m2);
+	mpz_init(m1x2);
+
+
+	//Calcul des messages m1 et m2
+	mpz_set_ui(m1, rand());
+	mpz_set_ui(m2, rand());
+	mpz_mul(m1x2, m1, m2);
+
+
+	//Calcul de C1 et B1
+	encrypt(publicKey, p, g, m1, C1, B1, secretKey, 1);
+
+	//Calcul de C2 et B2
+	encrypt(publicKey, p, g, m2, C2, B2, secretKey, 0);
+
+
+	//C = C1 * C2
+	mpz_mul(C, C1, C2);
+
+	//B = B1 * B2
+	mpz_mul(B, B1, B2);
+
+
+	//Dechiffrement de C et B dans m
+	decrypt(C, B, secretKey, m, p);
+
+	//m = m mod p
+	mpz_mod(m, m, p);
+
+
+	//Affichage des résultats
+	if(affichage){
+		printf("\n     m1 : ");
+		mpz_out_str(NULL, 10, m1);
+		printf("\n     m2 : ");
+		mpz_out_str(NULL, 10, m2);
+		printf("\n     m1x2 : ");
+		mpz_out_str(NULL, 10, m1x2);
+		printf("\n     m    : ");
+		mpz_out_str(NULL, 10, m);
+		printf("\n\n");
+	}
+
+}
+
+
+/**
+* Fonction qui effectue nbIteration de test de decrypt
+**/
+
+void testHomomorphie(int nbIteration){
+
+	mpz_t p, g, publicKey, secretKey;
+
+	int i;
+
+	for(i=1;i<=nbIteration;i++){
+
+		mpz_init(p);
+		mpz_init(g);
+		mpz_init(publicKey);
+		mpz_init(secretKey);
+
+		//Initialisation de g
+		mpz_set_ui(g, 2);
+
+		//Initialisation de p
+		mpz_init_set_str(p, P_HEXVALUE, 16);
+
+		//Calcul de la publicKey
+		keygen(p, g, publicKey, 0);
+
+		//Test de la propriété homomorphique
+		homomorphie(p, g, publicKey, secretKey, 1);
+
+		//Liberation de mémoire
+		mpz_clears(p, g, publicKey, secretKey, (void *) NULL);
+	}
+}
+
+
  
 int main()
 {
@@ -593,7 +702,9 @@ int main()
 
 	//testEncrypt(100);
 
-	testDecrypt(100);
+	//testDecrypt(100);
+
+	testHomomorphie(1);
 
     return 0; 
 }

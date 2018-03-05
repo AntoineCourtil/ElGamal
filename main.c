@@ -126,6 +126,10 @@ void euclide(mpz_t a, mpz_t u0, mpz_t p, mpz_t v0, mpz_t res0)
 
 
 
+/**
+* Fonction qui effectue nbIteration de test d'Eucide
+**/
+
 void testEuclide(int nbIteration){
 	mpz_t g, p, u, v;
 
@@ -156,6 +160,7 @@ void testEuclide(int nbIteration){
 		printauplusbv(g, u, p, v, pgcd);
 	}
 }
+
 
 
 /**
@@ -242,6 +247,10 @@ void expMod(mpz_t p, mpz_t g, mpz_t a, mpz_t res){
 }
 
 
+/**
+* Fonction qui effectue nbIteration de test de expMod
+**/
+
 void testExpMod(int nbIteration){
 	mpz_t g, p, a;
 
@@ -290,6 +299,11 @@ void testExpMod(int nbIteration){
 
 
 
+/**
+* Génére la clé publique publicKey
+* en fonction de p et g
+**/
+
 void keygen(mpz_t p, mpz_t g, mpz_t publicKey){
 
 	//Init de x
@@ -328,32 +342,45 @@ void keygen(mpz_t p, mpz_t g, mpz_t publicKey){
 	//Affichage des résultats
 	printPublicKey(p, g, x, publicKey);
 
-
 	//Verification
 	mpz_powm(publicKey, g, x, p);
 
 	//Affichage des résultats
-	printf("\nVerification :");
+	printf("\n\n          Verification :\n");
 	printPublicKey(p, g, x, publicKey);
+
+	printf("\n\n___________________________________\n\n");
 
 }
 
 
-void testKeygen(){
+/**
+* Fonction qui effectue nbIteration de test de expMod
+**/
+
+void testKeygen(int nbIteration){
 
 	mpz_t p, g, publicKey;
 
-	mpz_init(p);
-	mpz_init(g);
-	mpz_init(publicKey);
+	int i;
 
-	//Initialisation de g
-	mpz_set_ui(g, 2);
+	for(i=1;i<=nbIteration;i++){
 
-	//Initialisation de p
-	mpz_init_set_str(p, P_HEXVALUE, 16);
+		mpz_init(p);
+		mpz_init(g);
+		mpz_init(publicKey);
 
-	keygen(p, g, publicKey);
+		//Initialisation de g
+		mpz_set_ui(g, i);
+
+		//Initialisation de p
+		mpz_init_set_str(p, P_HEXVALUE, 16);
+
+		keygen(p, g, publicKey);
+
+		//Liberation de mémoire
+		mpz_clears(p, g, publicKey, (void *) NULL);
+	}
 
 
 }
@@ -364,9 +391,9 @@ int main()
 {
 	//testEuclide(10000);
 
-	testExpMod(100);
+	//testExpMod(100);
 
-	testKeygen();
+	testKeygen(10);
 
     return 0; 
 }

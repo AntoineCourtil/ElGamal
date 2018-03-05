@@ -21,6 +21,7 @@ ___
 
 ## Question 3. Implémentez la fonction Euclide
 
+cf. code.
 ___
 
 ## Question 4. Implémentez la fonction ExpMod

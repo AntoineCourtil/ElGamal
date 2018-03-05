@@ -704,7 +704,17 @@ int main()
 
 	//testDecrypt(100);
 
-	testHomomorphie(1);
+	testHomomorphie(100);
+
+	FILE* file = fopen("results.txt", "w+");
+
+	if(file == NULL){
+		printf("Erreur d'ouverture de fichier\n");
+		return -1;
+	}
+
+
+	fclose(file);
 
     return 0; 
 }

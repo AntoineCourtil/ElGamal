@@ -17,7 +17,11 @@ On évalue la qualité d'un générateur de nombre aléatoire en fonction de sa 
 - Sa discrépance mesure l'écart maximal de la suite donnée avec l'équirépartition.
 
 
+___
+
 ## Question 3. Implémentez la fonction Euclide
+
+___
 
 ## Question 4. Implémentez la fonction ExpMod
 
@@ -26,6 +30,8 @@ J'ai choisi de créer les variables :
 - g2 (g^2) 
 Afin de ne pas écraser les valeur de a et g initiale.
 
+
+___
 
 ## Question 5. Implémentez ces trois fonctions
 
@@ -37,8 +43,12 @@ Afin de ne pas écraser les valeur de a et g initiale.
 - Decrypt :
 
 
+___
+
 ## Question 6. Vérifiez la propriété homomorphique en chiffrant deux messages différents
 
+
+___
 
 ### Sources :
 
